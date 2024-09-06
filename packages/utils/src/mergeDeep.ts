@@ -48,7 +48,9 @@ export function mergeDeep<S extends any[]>(
         const outputPrototype = Object.getPrototypeOf(output);
         const sourcePrototype = Object.getPrototypeOf(source);
         if (sourcePrototype) {
-          for (const key of Object.getOwnPropertyNames(sourcePrototype)) {
+          let props: (string | symbol)[] = Object.getOwnPropertyNames(sourcePrototype);
+          props = props.concat(Object.getOwnPropertySymbols(sourcePrototype));
+          for (const key of props) {
             const descriptor = Object.getOwnPropertyDescriptor(sourcePrototype, key);
             if (isSome(descriptor)) {
               Object.defineProperty(outputPrototype, key, descriptor);

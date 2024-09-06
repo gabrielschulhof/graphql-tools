@@ -31,7 +31,9 @@ export function isObject(thing: any) {
 }
 
 export function copyOwnPropsIfNotPresent(target: Record<string, any>, source: Record<string, any>) {
-  for (const prop of Object.getOwnPropertyNames(source)) {
+  let props: (string | symbol)[] = Object.getOwnPropertyNames(source);
+  props = props.concat(Object.getOwnPropertySymbols(source));
+  for (const prop of props) {
     if (!Object.getOwnPropertyDescriptor(target, prop)) {
       const propertyDescriptor = Object.getOwnPropertyDescriptor(source, prop);
       Object.defineProperty(target, prop, propertyDescriptor == null ? {} : propertyDescriptor);
